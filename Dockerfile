@@ -1,19 +1,18 @@
-FROM node:latest
+FROM ubuntu:latest
+
+RUN apt-get update && apt-get install -y \
+    bash && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /app/data && \
+    chmod -R 700 /app/data
+
+COPY start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
+
+WORKDIR /app/data
 
 USER root
 
-RUN apt-get update && \
-    apt-get install -y \
-    docker.io \
-    git \
-    curl && \
-    apt-get clean
-
-WORKDIR /app
-
-RUN git clone https://github.com/hydralabs-beta/daemon.git . 
-
-RUN npm install
-
-# Command to start the app
-CMD ["sh", "-c", "npm run configure -- --panel $PANEL_URL --key $PANEL_KEY && node index.js"]
+CMD ["/usr/local/bin/start.sh"]

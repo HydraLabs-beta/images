@@ -23,12 +23,12 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t ghcr.io/hydren-dev/daemon:0.2 .
+        docker build -t ghcr.io/ma4z-sys/KenVM:beta_1 .
         echo "Image built successfully."
 
     - name: Push Docker image to GHCR
       run: |
-        docker push ghcr.io/hydren-dev/daemon:0.2
+        docker push ghcr.io/ma4z-spec/KenVM:beta_1
         echo "Image pushed to GHCR."
 
     - name: Verify Docker image
