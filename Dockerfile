@@ -1,18 +1,10 @@
-FROM ubuntu:latest
+FROM debian:bullseye
 
-RUN apt-get update && apt-get install -y \
-    bash && \
+RUN apt-get update && \
+    apt-get install -y qemu qemu-system qemu-utils && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /app/data && \
-    chmod -R 700 /app/data
-
-COPY start.sh /usr/local/bin/start.sh
-RUN chmod +x /usr/local/bin/start.sh
-
 WORKDIR /app/data
 
-USER root
-
-CMD ["/usr/local/bin/start.sh"]
+CMD ["bash", "-c", "qemu-system-x86_64 -hda /app/data/$OS -m "$INSTANCE_MEMORY"M -enable-kvm"]
