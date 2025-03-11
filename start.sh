@@ -2,10 +2,24 @@
 
 cd /app/data
 
-# Extract image only if it exists and .qcow2 does not already exist
+# Default memory
+INSTANCE_MEMORY=${INSTANCE_MEMORY:-512}
+
+# Check and extract .gz only if it’s a valid gzip file
 if [ -f "QemuSYS.qcow2.gz" ] && [ ! -f "QemuSYS.qcow2" ]; then
-    echo "[INFO] Detected compressed image. Extracting..."
-    gunzip -f QemuSYS.qcow2.gz || echo "[ERROR] Failed to extract .gz file"
+    echo "[INFO] Detected compressed image. Verifying format..."
+    if file QemuSYS.qcow2.gz | grep -q "gzip compressed data"; then
+        echo "[INFO] Extracting QemuSYS.qcow2.gz..."
+        gunzip -f QemuSYS.qcow2.gz || echo "[ERROR] Failed to extract .gz file"
+    else
+        echo "[ERROR] QemuSYS.qcow2.gz is not a valid gzip file. Skipping extraction."
+    fi
+fi
+
+# Check if QemuSYS.qcow2 now exists
+if [ ! -f "QemuSYS.qcow2" ]; then
+    echo "[ERROR] QemuSYS.qcow2 does not exist. Cannot start QEMU."
+    exit 1
 fi
 
 echo "[INFO] Starting QEMU with ${INSTANCE_MEMORY}M RAM"
