@@ -23,12 +23,12 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t ghcr.io/ma4z-sys/lamzVM:lts .
+        docker build -t ghcr.io/ma4z-sys/lamz:vm .
         echo "Image built successfully."
 
     - name: Push Docker image to GHCR
       run: |
-        docker push ghcr.io/ma4z-sys/lamzVM:lts
+        docker push ghcr.io/ma4z-sys/lamz:vm
         echo "Image pushed to GHCR."
 
     - name: Verify Docker image
